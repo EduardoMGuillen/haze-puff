@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { whatsappBuyUrl } from "@/lib/whatsapp";
+import { FILTER_EVENT } from "@/components/CategoryTiles";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
 
 function formatPrice(price: number) {
   return `L ${price.toLocaleString("es-HN")}`;
@@ -23,44 +25,62 @@ export default function Products({
   seeAllHref,
 }: Props) {
   const [filter, setFilter] = useState("all");
+
+  useEffect(() => {
+    function onFilter(event: Event) {
+      const category = (event as CustomEvent<string>).detail;
+      if (typeof category === "string") setFilter(category);
+    }
+    window.addEventListener(FILTER_EVENT, onFilter);
+    return () => window.removeEventListener(FILTER_EVENT, onFilter);
+  }, []);
+
+  const active = useMemo(() => products.filter((item) => item.active), [products]);
+
   const categories = useMemo(() => {
-    return Array.from(
-      new Set(products.filter((item) => item.active).map((item) => item.category)),
-    ).sort((a, b) => a.localeCompare(b, "es"));
-  }, [products]);
+    const counts = new Map<string, number>();
+    for (const item of active) counts.set(item.category, (counts.get(item.category) ?? 0) + 1);
+    return Array.from(counts.entries()).sort((a, b) => a[0].localeCompare(b[0], "es"));
+  }, [active]);
 
   const visible = useMemo(() => {
-    const active = products.filter(
-      (item) => item.active && (filter === "all" || item.category === filter),
-    );
-    return typeof limit === "number" ? active.slice(0, limit) : active;
-  }, [products, filter, limit]);
+    const list = active.filter((item) => filter === "all" || item.category === filter);
+    return typeof limit === "number" ? list.slice(0, limit) : list;
+  }, [active, filter, limit]);
 
   return (
     <section className="section" id="tienda">
       <div className="wrap">
-        <p className="section-kicker">Catálogo</p>
-        <h2 className="display">{title}</h2>
-        <p className="lede">
-          Precios de referencia en lempiras. El stock cambia: confirma por
-          WhatsApp antes de pasar.
-        </p>
-        <div className="filters">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="section-kicker">Catálogo</p>
+            <h2 className="display">{title}</h2>
+          </div>
+          <p className="lede">
+            Precios de referencia en lempiras. El stock cambia: confirma por
+            WhatsApp antes de pasar.
+          </p>
+        </div>
+        <div className="filters" role="tablist" aria-label="Categorías">
           <button
             type="button"
+            role="tab"
+            aria-selected={filter === "all"}
             className={filter === "all" ? "active" : ""}
             onClick={() => setFilter("all")}
           >
-            Todos
+            Todos <span>{active.length}</span>
           </button>
-          {categories.map((category) => (
+          {categories.map(([category, count]) => (
             <button
               key={category}
               type="button"
+              role="tab"
+              aria-selected={filter === category}
               className={filter === category ? "active" : ""}
               onClick={() => setFilter(category)}
             >
-              {category}
+              {category} <span>{count}</span>
             </button>
           ))}
         </div>
@@ -68,11 +88,16 @@ export default function Products({
           <div className="empty">Todavía no hay productos en esta categoría.</div>
         ) : (
           <div className="product-grid">
-            {visible.map((product) => (
-              <article key={product.id} className="product-card">
+            {visible.map((product, index) => (
+              <article
+                key={`${filter}-${product.id}`}
+                className="product-card"
+                data-reveal
+                style={{ transitionDelay: `${(index % 3) * 80}ms` }}
+              >
                 <Link href={`/producto/${product.id}`} className="product-media">
                   {product.promo && <span className="badge">Promo</span>}
-                  <img src={product.image} alt={product.name} />
+                  <img src={product.image} alt={product.name} loading="lazy" />
                 </Link>
                 <div className="product-body">
                   <small>{product.category}</small>
@@ -83,11 +108,12 @@ export default function Products({
                   <div className="product-row">
                     <strong className="price">{formatPrice(product.price)}</strong>
                     <a
-                      className="btn"
+                      className="btn btn-buy"
                       href={whatsappBuyUrl(product)}
                       target="_blank"
                       rel="noreferrer"
                     >
+                      <WhatsAppIcon />
                       Comprar
                     </a>
                   </div>

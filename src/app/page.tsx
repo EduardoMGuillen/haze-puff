@@ -1,24 +1,40 @@
-import Header from "@/components/Header";
+import Header, { InstagramIcon } from "@/components/Header";
 import Footer from "@/components/Footer";
 import Products from "@/components/Products";
 import ShopMap from "@/components/ShopMap";
 import ContactForm from "@/components/ContactForm";
-import { CONTACT, INSTAGRAM_URL, SHOP } from "@/lib/constants";
+import CategoryTiles from "@/components/CategoryTiles";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
+import { CONTACT, INSTAGRAM_HANDLE, INSTAGRAM_URL, SHOP } from "@/lib/constants";
 import { getProducts } from "@/lib/products";
 import { whatsappChatUrl } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 
 const MARQUEE = [
+  "Vapes",
+  "Good vibes",
+  "Better days",
   "Desechables",
   "Pods",
   "Líquidos",
-  "Accesorios",
+  "Vapes HD",
   "Cofradía",
-  "Cortés",
-  "Haze Puff",
-  "WhatsApp",
-  "+18",
+];
+
+const FEATURES = [
+  {
+    title: "Pides por WhatsApp",
+    text: "Tocas Comprar y el chat se abre con el producto listo. Sin registros ni carritos.",
+  },
+  {
+    title: "Catálogo al día",
+    text: "Lo que ves aquí lo actualizamos desde la tienda, con promos y novedades.",
+  },
+  {
+    title: "Aquí en Cofradía",
+    text: "Tienda local en Cofradía, Cortés. Coordinamos retiro o entrega por chat.",
+  },
 ];
 
 const STEPS = [
@@ -53,6 +69,10 @@ const FAQS = [
     a: "Son de referencia. El inventario cambia, así que confirmamos disponibilidad y precio en el chat.",
   },
   {
+    q: "¿Hacen entregas?",
+    a: "Escríbenos por WhatsApp y coordinamos retiro en tienda o entrega según tu zona.",
+  },
+  {
     q: "¿A partir de qué edad?",
     a: "La venta es solo para mayores de 18 años.",
   },
@@ -60,6 +80,8 @@ const FAQS = [
 
 export default async function HomePage() {
   const products = await getProducts();
+  const active = products.filter((item) => item.active);
+  const categoryCount = new Set(active.map((item) => item.category)).size;
   const chat = whatsappChatUrl(
     "Hola, quiero información de Haze Puff en Cofradía.",
   );
@@ -67,77 +89,155 @@ export default async function HomePage() {
   return (
     <div className="page">
       <Header />
+
       <section className="hero">
-        <div className="hero-copy">
-          <p className="hero-kicker">Cofradía · Cortés</p>
-          <img className="hero-logo" src="/logo.png" alt="Haze Puff" />
-          <h1 className="display">
-            Tienda de <span>vapes</span>
-          </h1>
-          <p>
-            Desechables, pods y líquidos en Cofradía. Elige en el catálogo y
-            pide por WhatsApp.
-          </p>
-          <div className="hero-actions">
-            <a className="btn" href="#tienda">
-              Ver tienda
-            </a>
-            <a className="btn btn-ghost" href={chat} target="_blank" rel="noreferrer">
-              Escribir ahora
-            </a>
+        <div className="hero-inner">
+          <div className="hero-copy">
+            <p className="hero-kicker">
+              <span className="dot" /> Cofradía · Cortés · Honduras
+            </p>
+            <h1 className="display">
+              Tu tienda de <span>vapes</span> en Cofradía
+            </h1>
+            <p className="hero-lede">
+              Desechables, pods, líquidos y Vapes HD. Elige en el catálogo y
+              pídelo por WhatsApp en un toque.
+            </p>
+            <div className="hero-actions">
+              <a className="btn btn-lg" href="#tienda">
+                Ver catálogo
+              </a>
+              <a
+                className="btn btn-lg btn-ghost"
+                href={chat}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <WhatsAppIcon />
+                Escribir ahora
+              </a>
+            </div>
+            <dl className="hero-stats">
+              <div>
+                <dt>{active.length}</dt>
+                <dd>Productos</dd>
+              </div>
+              <div>
+                <dt>{categoryCount}</dt>
+                <dd>Categorías</dd>
+              </div>
+              <div>
+                <dt>18+</dt>
+                <dd>Solo mayores</dd>
+              </div>
+            </dl>
           </div>
-          <p className="hero-hint">Solo mayores de 18 años</p>
+          <div className="hero-mark" aria-hidden>
+            <div className="mark-glow" />
+            <div className="mark-ring" />
+            <div className="mark-ring ring-2" />
+            <img src="/logo.png" alt="" className="mark-logo" />
+          </div>
         </div>
+        <a className="scroll-cue" href="#categorias" aria-label="Bajar">
+          <span />
+        </a>
       </section>
 
       <div className="marquee-wrap">
         <div className="marquee">
           {[0, 1].map((loop) => (
-            <span key={loop} style={{ display: "flex", gap: "2.2rem" }}>
+            <span key={loop} className="marquee-group" aria-hidden={loop === 1}>
               {MARQUEE.map((item) => (
-                <span key={`${loop}-${item}`}>{item} ·</span>
+                <span key={`${loop}-${item}`} className="marquee-item">
+                  {item}
+                  <CloudGlyph />
+                </span>
               ))}
             </span>
           ))}
         </div>
       </div>
 
+      <section className="section" id="categorias">
+        <div className="wrap">
+          <div className="section-head" data-reveal>
+            <div>
+              <p className="section-kicker">Lo que encuentras</p>
+              <h2 className="display">Elige tu vibe</h2>
+            </div>
+            <p className="lede">
+              Toca una categoría y te llevamos directo a esos productos.
+            </p>
+          </div>
+          <CategoryTiles products={products} />
+        </div>
+      </section>
+
       <Products products={products} />
 
       <section className="section" id="nosotros">
         <div className="wrap split">
-          <div>
+          <div data-reveal>
             <p className="section-kicker">La tienda</p>
-            <h2 className="display">Haze en Cofradía</h2>
+            <h2 className="display">
+              Good vibes, <span className="grad">better days</span>
+            </h2>
             <p className="lede">
-              Haze Puff es una tienda de vapes en Cofradía, Cortés. El catálogo
-              lo actualizamos desde el panel: lo que ves aquí es lo que hay
-              para pedir.
+              Haze Puff es una tienda de vapes en Cofradía, Cortés. Atendemos
+              directo por WhatsApp y el catálogo se actualiza desde la tienda.
             </p>
-            <ul className="checks">
-              <li>Pedidos directos por WhatsApp {CONTACT.phoneDisplay}</li>
-              <li>
-                Instagram{" "}
-                <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
-                  @h4zepuff
-                </a>
-              </li>
-              <li>Venta únicamente a mayores de 18 años</li>
-            </ul>
+            <div className="features">
+              {FEATURES.map((feature) => (
+                <article key={feature.title} className="feature">
+                  <h3>{feature.title}</h3>
+                  <p>{feature.text}</p>
+                </article>
+              ))}
+            </div>
           </div>
-          <div className="about-visual">
-            <img src="/logo.png" alt="" />
-          </div>
+          <a
+            className="ig-card"
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noreferrer"
+            data-reveal
+          >
+            <div className="ig-top">
+              <img src="/icon-192.png" alt="" />
+              <div>
+                <strong>@{INSTAGRAM_HANDLE}</strong>
+                <small>Instagram</small>
+              </div>
+              <span className="ig-icon">
+                <InstagramIcon />
+              </span>
+            </div>
+            <div className="ig-visual">
+              <img src="/logo.png" alt="Haze Puff" />
+            </div>
+            <p>Novedades, sabores nuevos y promos primero en Instagram.</p>
+            <span className="btn">Seguir @{INSTAGRAM_HANDLE}</span>
+          </a>
         </div>
       </section>
 
       <section className="section">
         <div className="wrap">
-          <p className="section-kicker">Cómo va</p>
-          <h2 className="display">Del catálogo al chat</h2>
+          <div className="section-head" data-reveal>
+            <div>
+              <p className="section-kicker">Cómo va</p>
+              <h2 className="display">Del catálogo al chat</h2>
+            </div>
+          </div>
           <div className="steps">
-            {STEPS.map((step) => (
-              <article key={step.n} className="step">
+            {STEPS.map((step, index) => (
+              <article
+                key={step.n}
+                className="step"
+                data-reveal
+                style={{ transitionDelay: `${index * 90}ms` }}
+              >
                 <div className="n">{step.n}</div>
                 <h3>{step.title}</h3>
                 <p>{step.text}</p>
@@ -147,55 +247,84 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="section" id="ubicacion">
-        <div className="wrap">
-          <p className="section-kicker">Mapa</p>
-          <h2 className="display">Cofradía, Cortés</h2>
-          <p className="lede">
-            {SHOP.city}, {SHOP.country}. Mueve el mapa o abre la ruta en
-            Google Maps.
-          </p>
-          <div className="map-layout">
-            <div className="card">
-              <h3>Haze Puff</h3>
-              <p>{CONTACT.address}</p>
-              <p style={{ marginTop: "0.8rem" }}>
-                <a className="btn" href={SHOP.mapsUrl} target="_blank" rel="noreferrer">
-                  Cómo llegar
-                </a>
-              </p>
+      <section className="map-section" id="ubicacion">
+        <div className="map-stage">
+          <ShopMap />
+          <div className="map-card" data-reveal>
+            <p className="section-kicker">Ubicación</p>
+            <h2 className="display">Cofradía, Cortés</h2>
+            <p>
+              {SHOP.city}, {SHOP.country}. Escríbenos antes de pasar y te
+              damos la indicación exacta.
+            </p>
+            <div className="map-actions">
+              <a className="btn" href={SHOP.mapsUrl} target="_blank" rel="noreferrer">
+                Google Maps
+              </a>
+              <a className="btn btn-ghost" href={SHOP.wazeUrl} target="_blank" rel="noreferrer">
+                Waze
+              </a>
             </div>
-            <ShopMap />
+            <a className="map-wa" href={chat} target="_blank" rel="noreferrer">
+              <WhatsAppIcon /> Pedir indicaciones
+            </a>
           </div>
         </div>
       </section>
 
       <section className="section" id="contacto">
-        <div className="wrap">
-          <p className="section-kicker">Contacto</p>
-          <h2 className="display">Escríbenos</h2>
-          <div className="contact-grid">
-            <div>
-              <p className="lede">
-                El formulario abre WhatsApp con tu mensaje listo para{" "}
-                {CONTACT.phoneDisplay}.
-              </p>
-              <p>
-                <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
-                  Instagram @h4zepuff
-                </a>
-              </p>
+        <div className="wrap contact-grid">
+          <div data-reveal>
+            <p className="section-kicker">Contacto</p>
+            <h2 className="display">Escríbenos</h2>
+            <p className="lede">
+              El formulario abre WhatsApp con tu mensaje listo para{" "}
+              {CONTACT.phoneDisplay}.
+            </p>
+            <div className="contact-links">
+              <a href={CONTACT.phoneHref} target="_blank" rel="noreferrer" className="contact-link">
+                <span className="ci ci-wa">
+                  <WhatsAppIcon />
+                </span>
+                <span>
+                  <small>WhatsApp</small>
+                  {CONTACT.phoneDisplay}
+                </span>
+              </a>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" className="contact-link">
+                <span className="ci ci-ig">
+                  <InstagramIcon />
+                </span>
+                <span>
+                  <small>Instagram</small>@{INSTAGRAM_HANDLE}
+                </span>
+              </a>
+              <a href={SHOP.mapsUrl} target="_blank" rel="noreferrer" className="contact-link">
+                <span className="ci ci-map">
+                  <PinGlyph />
+                </span>
+                <span>
+                  <small>Tienda</small>
+                  {CONTACT.address}
+                </span>
+              </a>
             </div>
+          </div>
+          <div data-reveal>
             <ContactForm />
           </div>
         </div>
       </section>
 
       <section className="section">
-        <div className="wrap">
-          <p className="section-kicker">Preguntas</p>
-          <h2 className="display">Antes de pasar</h2>
-          <div className="faq">
+        <div className="wrap faq-wrap">
+          <div className="section-head" data-reveal>
+            <div>
+              <p className="section-kicker">Preguntas</p>
+              <h2 className="display">Antes de pasar</h2>
+            </div>
+          </div>
+          <div className="faq" data-reveal>
             {FAQS.map((item) => (
               <details key={item.q}>
                 <summary>{item.q}</summary>
@@ -207,11 +336,12 @@ export default async function HomePage() {
       </section>
 
       <section className="section cta">
-        <div className="wrap">
-          <p className="section-kicker">{SHOP.city}</p>
+        <div className="wrap" data-reveal>
+          <img src="/logo.png" alt="" className="cta-logo" />
           <h2 className="display">¿Ya elegiste?</h2>
           <p>Mándanos el producto por WhatsApp y te confirmamos si está.</p>
-          <a className="btn btn-wa" href={chat} target="_blank" rel="noreferrer">
+          <a className="btn btn-wa btn-lg" href={chat} target="_blank" rel="noreferrer">
+            <WhatsAppIcon />
             Escribir a {CONTACT.phoneDisplay}
           </a>
         </div>
@@ -224,13 +354,34 @@ export default async function HomePage() {
         rel="noreferrer"
         aria-label="WhatsApp"
       >
-        <svg viewBox="0 0 24 24" aria-hidden>
-          <path
-            fill="currentColor"
-            d="M12.04 2C6.58 2 2.15 6.4 2.15 11.83c0 1.74.46 3.44 1.34 4.94L2 22l5.39-1.4a10 10 0 0 0 4.65 1.18h.01c5.46 0 9.89-4.4 9.89-9.83C21.94 6.4 17.5 2 12.04 2zm5.76 14.15c-.24.68-1.4 1.3-1.94 1.38-.5.07-1.12.1-1.81-.11-.42-.13-.95-.3-1.64-.59-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.16-1.54-1.16-2.94s.73-2.08 1-2.37c.24-.27.64-.4 1.02-.4.12 0 .23 0 .33.01.3.01.44.03.64.5.24.58.82 2 .89 2.15.07.14.12.32.02.51-.1.19-.15.31-.29.48-.14.16-.3.37-.43.49-.14.13-.29.28-.12.54.16.26.73 1.2 1.57 1.95 1.08.96 1.99 1.26 2.27 1.4.28.14.44.12.6-.07.17-.19.7-.81.88-1.09.19-.27.37-.23.62-.14.26.1 1.62.76 1.9.9.28.14.46.21.53.32.07.13.07.74-.17 1.42z"
-          />
-        </svg>
+        <WhatsAppIcon />
       </a>
     </div>
+  );
+}
+
+function CloudGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden className="cloud">
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M7 18h10a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.1 9.2 4.4 4.4 0 0 0 7 18z"
+      />
+    </svg>
+  );
+}
+
+function PinGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
+      />
+    </svg>
   );
 }

@@ -1,29 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { INSTAGRAM_URL, NAV_LINKS } from "@/lib/constants";
 import { whatsappChatUrl } from "@/lib/whatsapp";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const chat = whatsappChatUrl("Hola, quiero información de Haze Puff.");
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="nav">
+    <header className={`nav${scrolled || open ? " scrolled" : ""}`}>
       <Link href="/" className="nav-brand" onClick={() => setOpen(false)}>
-        <img src="/logo.png" alt="" />
+        <img src="/icon-192.png" alt="" />
         <span>
           HAZE <em>PUFF</em>
         </span>
       </Link>
       <button
         type="button"
-        className="nav-toggle"
+        className={`nav-toggle${open ? " open" : ""}`}
         aria-expanded={open}
+        aria-label="Menú"
         onClick={() => setOpen((value) => !value)}
       >
-        Menú
+        <span />
+        <span />
       </button>
       <nav className={`nav-links${open ? " open" : ""}`}>
         {NAV_LINKS.map((link) => (
@@ -41,6 +52,7 @@ export default function Header() {
           <InstagramIcon />
         </a>
         <a className="btn btn-wa" href={chat} target="_blank" rel="noreferrer">
+          <WhatsAppIcon />
           WhatsApp
         </a>
       </nav>
@@ -48,7 +60,7 @@ export default function Header() {
   );
 }
 
-function InstagramIcon() {
+export function InstagramIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden>
       <path

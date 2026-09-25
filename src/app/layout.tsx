@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Oswald, Outfit } from "next/font/google";
 import SmokeField from "@/components/SmokeField";
+import RevealObserver from "@/components/RevealObserver";
+import AgeGate from "@/components/AgeGate";
 import { BRAND, SITE_URL } from "@/lib/constants";
 import "./globals.css";
 
@@ -53,11 +55,26 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" data-scroll-behavior="smooth" className={`${sans.variable} ${display.variable}`}>
+    <html
+      lang="es"
+      data-scroll-behavior="smooth"
+      className={`${sans.variable} ${display.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('reveal-ready')",
+          }}
+        />
+      </head>
       <body>
         <SmokeField />
         <div className="grain" aria-hidden />
+        <RevealObserver />
         {children}
+        <AgeGate />
       </body>
     </html>
   );

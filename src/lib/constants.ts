@@ -1,5 +1,5 @@
 export const BRAND = "Haze Puff";
-export const BRAND_TAGLINE = "Tienda de vapes";
+export const BRAND_TAGLINE = "Vapes · Good vibes · Better days";
 export const WHATSAPP_NUMBER =
   process.env.NEXT_PUBLIC_WHATSAPP?.replace(/\D/g, "") || "50488445272";
 
@@ -48,6 +48,7 @@ export const SHOP = {
   country: "Honduras",
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=15.40967,-88.15498",
+  wazeUrl: "https://waze.com/ul?ll=15.40967,-88.15498&navigate=yes",
 };
 
 export const CONTACT = {
