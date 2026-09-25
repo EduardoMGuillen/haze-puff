@@ -756,7 +756,7 @@ textarea {
 /* Category tiles */
 .cat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1rem;
 }
 
@@ -806,12 +806,12 @@ textarea {
 .cat-info {
   display: grid;
   gap: 0.15rem;
-  padding: 1.1rem 1.2rem;
+  padding: 1.1rem 1rem;
 }
 
 .cat-info strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 1.5vw + 0.3rem, 1.5rem);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -1926,8 +1926,23 @@ details p {
     grid-template-columns: 1fr;
   }
 
+  .cat-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+  }
+
   .cat-tile {
-    min-height: 190px;
+    min-height: 180px;
+  }
+
+  .cat-tile:first-child:nth-last-child(odd) {
+    grid-column: 1 / -1;
+    background: #000;
+  }
+
+  .cat-tile:first-child:nth-last-child(odd) img {
+    object-fit: contain;
+    object-position: 85% center;
   }
 
   .section-head .lede {
