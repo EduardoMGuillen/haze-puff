@@ -1,0 +1,112 @@
+[
+  {
+    "id": "vape-hd-uva",
+    "name": "Vape HD Uva",
+    "description": "Desechable HD con pantalla. Sabor uva. Confirma stock en Cofradía antes de pasar.",
+    "price": 480,
+    "image": "/catalog/vape-hd-uva.png",
+    "category": "Vapes HD",
+    "promo": true,
+    "active": true,
+    "createdAt": "2026-09-24T20:00:00.000Z"
+  },
+  {
+    "id": "vape-hd-azul",
+    "name": "Vape HD Azul",
+    "description": "Desechable HD con pantalla. Perfil frío y azul. Pregunta disponibilidad por WhatsApp.",
+    "price": 480,
+    "image": "/catalog/vape-hd-azul.png",
+    "category": "Vapes HD",
+    "promo": false,
+    "active": true,
+    "createdAt": "2026-09-24T20:00:00.000Z"
+  },
+  {
+    "id": "vape-hd-berry",
+    "name": "Vape HD Berry",
+    "description": "Desechable HD con pantalla. Sabor berry. El precio es de referencia.",
+    "price": 480,
+    "image": "/catalog/vape-hd-berry.png",
+    "category": "Vapes HD",
+    "promo": false,
+    "active": true,
+    "createdAt": "2026-09-24T20:00:00.000Z"
+  },
+  {
+    "id": "vape-hd-menta",
+    "name": "Vape HD Menta",
+    "description": "Desechable HD con pantalla. Sabor menta. Confirma si está en tienda.",
+    "price": 480,
+    "image": "/catalog/vape-hd-menta.png",
+    "category": "Vapes HD",
+    "promo": false,
+    "active": true,
+    "createdAt": "2026-09-24T20:00:00.000Z"
+  },
+  {
+    "id": "desechable-nube-15k",
+    "name": "Desechable Nube 15K",
+    "description": "Desechable de larga duración. Pregunta por sabores disponibles en tienda.",
+    "price": 350,
+    "image": "/catalog/desechable.png",
+    "category": "Desechables",
+    "promo": true,
+    "active": true,
+    "createdAt": "2026-09-24T12:00:00.000Z"
+  },
+  {
+    "id": "desechable-hielo-azul",
+    "name": "Desechable Hielo Azul",
+    "description": "Perfil frío y dulce. Stock sujeto a lo que haya en Cofradía.",
+    "price": 320,
+    "image": "/catalog/desechable.png",
+    "category": "Desechables",
+    "promo": false,
+    "active": true,
+    "createdAt": "2026-09-24T12:00:00.000Z"
+  },
+  {
+    "id": "pod-haze-mini",
+    "name": "Pod Haze Mini",
+    "description": "Pod recargable, compacto, para uso diario. Confirma colores por WhatsApp.",
+    "price": 690,
+    "image": "/catalog/pod.png",
+    "category": "Pods",
+    "promo": false,
+    "active": true,
+    "createdAt": "2026-09-24T12:00:00.000Z"
+  },
+  {
+    "id": "liquido-purple-ice",
+    "name": "Líquido Purple Ice 30ml",
+    "description": "Líquido de 30ml. Pregunta por nicotina y sabores antes de comprar.",
+    "price": 180,
+    "image": "/catalog/liquido.png",
+    "category": "Líquidos",
+    "promo": true,
+    "active": true,
+    "createdAt": "2026-09-24T12:00:00.000Z"
+  },
+  {
+    "id": "liquido-blue-rush",
+    "name": "Líquido Blue Rush 30ml",
+    "description": "Líquido de 30ml con perfil fresco. Disponibilidad según inventario del día.",
+    "price": 180,
+    "image": "/catalog/liquido.png",
+    "category": "Líquidos",
+    "promo": false,
+    "active": true,
+    "createdAt": "2026-09-24T12:00:00.000Z"
+  },
+  {
+    "id": "kit-carga",
+    "name": "Cargador y repuestos",
+    "description": "Cables, coils y repuestos. Cuéntanos tu modelo por WhatsApp y te decimos si lo tenemos.",
+    "price": 150,
+    "image": "/catalog/accesorio.png",
+    "category": "Accesorios",
+    "promo": false,
+    "active": true,
+    "createdAt": "2026-09-24T12:00:00.000Z"
+  }
+]
